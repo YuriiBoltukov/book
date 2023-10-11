@@ -1,32 +1,51 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {BooksState, setBooks} from '../../store/slices/booksSlice';
+import {addBooks, BooksState, resetPagination, setBooks, setPagination} from '../../store/slices/booksSlice';
 import {getBooks, params} from '../../api';
 import BookCard from '../BookCard/BookCard';
+import {BookQuery, loadBooks} from '../../shared/utils/book.functions';
+import {Book} from '../../shared/models/book.model';
 
 const BookList: React.FC = () => {
   const dispatch = useDispatch();
-  const books = useSelector((state: { books: BooksState }) => state.books.books);
+  const state = useSelector((state: { books: BooksState }) => state.books);
 
   useEffect(() => {
-    loadBooks()
+    init()
   }, []);
 
-  async function loadBooks(){
-    const booksResponse = await getBooks(params);
-    if (!booksResponse) return;
+  async function loadMore() {
+    dispatch(addBooks(await getBooks()));
+  }
 
-    const books = booksResponse?.items;
-    dispatch(setBooks(books));
+  async function init(){
+    dispatch(setBooks(await getBooks()));
+  }
+
+  async function getBooks(): Promise<Book[]> {
+    const queryData: BookQuery = {
+      searchStr: state.searchStr,
+      filters: {
+        category: state.filters.category,
+      },
+      sort: state.sort
+    }
+
+    const {books, pagination} = await loadBooks(queryData, state.pagination)
+
+    dispatch(setPagination(pagination));
+
+    return books;
   }
 
   return (
     <>
       {
-        books?.length ? books.map((book, i) => {
+        state.books?.length ? state.books.map((book, i) => {
           return <BookCard book={book} key={i}/>
         }) : 'FATALITY'
       }
+      { state.pagination.from < (state.pagination.total ?? 0) && <button onClick={loadMore}>load more</button>}
     </>
   );
 };

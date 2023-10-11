@@ -18,3 +18,17 @@ export interface BookVolume  {
     thumbnail: string;
   }
 }
+
+export interface CommonQuery {
+  searchStr: string;
+  filters: {
+    category: string;
+  };
+  sort: string;
+}
+
+export interface Pagination {
+  from: number;
+  limit: number;
+  total: number | null;
+}

@@ -9,7 +9,7 @@ const BookCard: React.FC<FCBook> = ({book}: FCBook) => {
     <Card
       hoverable
       style={{ width: 80 }}
-      cover={<img alt="example" src={book.volumeInfo.imageLinks.smallThumbnail} />}
+      cover={<img alt="example" src={book.volumeInfo?.imageLinks?.smallThumbnail} />}
     >
       <Card.Meta title={book.volumeInfo.title} description={book.volumeInfo.authors ? book.volumeInfo.authors.join(' ') : ''} />
     </Card>
