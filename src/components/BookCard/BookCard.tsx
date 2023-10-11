@@ -1,15 +1,17 @@
 import React from "react";
 import { Card } from 'antd';
+import {Book} from '../../shared/models/book.model';
 
-const { Meta } = Card;
-const BookCard: React.FC = () => {
+type FCBook = { book: Book };
+
+const BookCard: React.FC<FCBook> = ({book}: FCBook) => {
   return (
     <Card
       hoverable
-      style={{ width: 240 }}
-      cover={<img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />}
+      style={{ width: 80 }}
+      cover={<img alt="example" src={book.volumeInfo.imageLinks.smallThumbnail} />}
     >
-      <Meta title="Europe Street beat" description="www.instagram.com" />
+      <Card.Meta title={book.volumeInfo.title} description={book.volumeInfo.authors ? book.volumeInfo.authors.join(' ') : ''} />
     </Card>
   );
 };

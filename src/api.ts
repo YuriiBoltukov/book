@@ -1,40 +1,27 @@
+import {BASE_GOOGLE_BOOKS_URL, GOOGLE_BOOKS_API_KEY} from './shared/constants/api.constants';
+import {makeQueryParams, QueryParams} from './shared/utils/api.functions';
+import {BookResponse} from './shared/models/api.model';
 
-
-const API_KEY = {
-  key: "AIzaSyCCUZ8YByYYKnsC61JNhKqXtT5G8MixOCs"
-};
-
-const queryParams = {
+/** MOCK */
+export const params = {
   q: "javascript",
   maxResults: 10
 };
 
+export async function getBooks(params: QueryParams): Promise<BookResponse | null> {
+  const queryParams = makeQueryParams(params);
+  const apiUrl = `${BASE_GOOGLE_BOOKS_URL}/volumes?key=${GOOGLE_BOOKS_API_KEY}&${queryParams}`;
+  let result: BookResponse | null = null;
 
-const queryString = Object.keys(queryParams)
-  // @ts-ignore
-  .map(key => `${key}=${encodeURIComponent(queryParams[key])}`)
-  .join("&");
-const apiUrl = `https://www.googleapis.com/books/v1/volumes?key=${API_KEY.key}&${queryString}`;
-async function fetchBooks() {
   try {
     const response = await fetch(apiUrl);
 
-    if (!response.ok) {
-      throw new Error(`Ошибка при выполнении запроса: ${response.status}`);
+    if (response.ok) {
+      result = await response.json();
     }
-
-    const data = await response.json();
-
-  } catch (error) {
-    console.error('Произошла ошибка:', error);
-  }
-}
-export async function getBooks() {
-  try {
-    return await fetchBooks();
   } catch (error) {
     console.error('Произошла ошибка при получении книг:', error);
+  } finally {
+    return result;
   }
-
 }
-
