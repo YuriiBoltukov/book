@@ -1,8 +1,6 @@
 import React from "react";
-import style from './header.module.scss'
-import {getBooks} from '../../api';
-import Input from '../Input/Input';
-
+import style from "./header.module.scss";
+import Input from "../Input/Input";
 
 const Header = () => {
   return (

@@ -1,10 +1,15 @@
 import React from "react";
-import BookList from '../components/BookList/BookList';
+import BookList from "../components/BookList/BookList";
+import { Route, Routes } from "react-router-dom";
+import BookDetails from "../components/BookPage/BookPage";
 
 const MainPage: React.FC = () => {
   return (
     <>
-      <BookList />
+      <Routes>
+        <Route path="/" element={<BookList />} />
+        <Route path="/detail/:id" element={<BookDetails />} />
+      </Routes>
     </>
   );
 };
