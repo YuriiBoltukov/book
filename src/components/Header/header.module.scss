@@ -1,4 +1,9 @@
 .header {
+  background-image: url("../../assets/images/bg.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 100vw;
+  height: auto;
   &_title {
     font-size: 35px;
     color: #fff;

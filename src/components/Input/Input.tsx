@@ -13,6 +13,7 @@ import {
 import {BookQuery, loadBooks} from '../../shared/utils/book.functions';
 import {SORT_OPTIONS} from '../../shared/constants/sort.constants';
 import {CATEGORY_OPTIONS} from '../../shared/constants/filter.constants';
+import {Button, Space} from 'antd';
 
 const Input: React.FC = () => {
 
@@ -53,19 +54,27 @@ const Input: React.FC = () => {
   /** sends request */
   async function handleSubmit (event?: React.FormEvent<HTMLFormElement>) {
     if (event) event.preventDefault();
-    const queryData: BookQuery = {
-      searchStr: state.searchStr,
-      filters: {
-        category: state.filters.category,
-      },
-      sort: state.sort
+    try {
+      const queryData: BookQuery = {
+        searchStr: state.searchStr,
+        filters: {
+          category: state.filters.category,
+        },
+        sort: state.sort,
+      };
+
+      dispatch(resetPagination());
+
+      const { books, pagination } = await loadBooks(queryData, {
+        ...state.pagination,
+        from,
+      });
+
+      dispatch(setBooks(books));
+      dispatch(setPagination(pagination));
+    } catch (error) {
+      console.error('Error submitting form:', error);
     }
-    console.log(from)
-    dispatch(resetPagination())
-    console.log(from)
-    const {books, pagination} = await loadBooks(queryData, {...state.pagination, from});
-    dispatch(setBooks(books));
-    dispatch(setPagination(pagination));
   };
 
   return (
@@ -90,7 +99,9 @@ const Input: React.FC = () => {
         onChange={handleSortOptionChange}
       />
       </div>
-      <button type='submit'>Отправить</button>
+      <Space wrap>
+        <Button>Отправить</Button>
+      </Space>
     </form>
   );
 };
