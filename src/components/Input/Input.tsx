@@ -6,6 +6,7 @@ import {
   resetPagination,
   setBooks,
   setFilters,
+  setLoading,
   setPagination,
   setSearchStr,
   setSort,
@@ -14,6 +15,7 @@ import { BookQuery, loadBooks } from "../../shared/utils/book.functions";
 import { SORT_OPTIONS } from "../../shared/constants/sort.constants";
 import { CATEGORY_OPTIONS } from "../../shared/constants/filter.constants";
 import { useNavigate } from "react-router-dom";
+import { Button } from "antd";
 
 const Input: React.FC = () => {
   const navigate = useNavigate();
@@ -58,11 +60,10 @@ const Input: React.FC = () => {
   };
 
   /** sends request */
-  async function handleSubmit(
-    event?: React.FormEvent<HTMLFormElement | HTMLButtonElement>,
-  ) {
+  async function handleSubmit(event?: React.FormEvent<HTMLElement>) {
     if (event) event.preventDefault();
     try {
+      dispatch(setLoading(true));
       const queryData: BookQuery = {
         searchStr: state.searchStr,
         filters: {
@@ -82,7 +83,7 @@ const Input: React.FC = () => {
         ...state.pagination,
         from,
       });
-
+      dispatch(setLoading(false));
       dispatch(setBooks(books));
       dispatch(setPagination(pagination));
     } catch (error) {
@@ -113,7 +114,9 @@ const Input: React.FC = () => {
         />
       </div>
 
-      <button onClick={handleSubmit}>Отправить</button>
+      <Button onClick={handleSubmit} loading={state.loading}>
+        Отправить
+      </Button>
     </form>
   );
 };
