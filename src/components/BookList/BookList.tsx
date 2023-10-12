@@ -54,7 +54,7 @@ const BookList: React.FC = () => {
           ? state.books.map((book, i) => {
               return <BookCard book={book} key={i} />;
             })
-          : "FATALITY"}
+          : null}
         {state.pagination.from < (state.pagination.total ?? 0) && (
           <Button className={style.books_button} onClick={loadMore}>
             load more
