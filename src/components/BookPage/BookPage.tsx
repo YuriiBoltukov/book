@@ -22,9 +22,9 @@ const BookDetails = () => {
             <img
               src={
                 book.volumeInfo.imageLinks.thumbnail ||
-                "http://placehold.it/150x150/"
+                require("../../assets/images/book.jpg")
               }
-              alt={`Cover`}
+              alt="book"
             />
           </div>
           <div className={style.details_info}>

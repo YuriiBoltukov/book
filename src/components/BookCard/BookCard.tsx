@@ -17,7 +17,10 @@ const BookCard: React.FC<FCBook> = ({ book }: FCBook) => {
         cover={
           <img
             alt="example"
-            src={book.volumeInfo?.imageLinks?.smallThumbnail}
+            src={
+              book.volumeInfo?.imageLinks?.smallThumbnail ||
+              require("../../assets/images/book.jpg")
+            }
           />
         }
       >
