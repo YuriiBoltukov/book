@@ -1,7 +1,7 @@
 import React from "react";
 import BookList from "../components/BookList/BookList";
 import { Route, Routes } from "react-router-dom";
-import BookDetails from "../components/BookPage/BookPage";
+import BookDetails from "../components/BookDetail/BookDetail";
 
 const MainPage: React.FC = () => {
   return (

@@ -1,12 +1,12 @@
 import React from "react";
 import style from "./header.module.scss";
-import Input from "../Input/Input";
+import SearchFilterSortBar from "../SearchFilterSortBar/SearchFilterSortBar";
 
 const Header = () => {
   return (
     <div className={style.header}>
       <h1 className={style.header_title}>Search for books</h1>
-      <Input />
+      <SearchFilterSortBar />
     </div>
   );
 };

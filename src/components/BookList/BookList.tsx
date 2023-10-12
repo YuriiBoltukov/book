@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   addBooks,
   BooksState,
+  setLoading,
   setPagination,
 } from "../../store/slices/booksSlice";
 import BookCard from "../BookCard/BookCard";
@@ -17,8 +18,10 @@ const BookList: React.FC = () => {
 
   async function loadMore() {
     try {
+      dispatch(setLoading(true));
       const newBooks = await getBooks();
       dispatch(addBooks(newBooks));
+      dispatch(setLoading(false));
     } catch (error) {
       console.error("Error loading more books:", error);
     }
@@ -55,12 +58,16 @@ const BookList: React.FC = () => {
               return <BookCard book={book} key={i} />;
             })
           : null}
-        {state.pagination.from < (state.pagination.total ?? 0) && (
-          <Button className={style.books_button} onClick={loadMore}>
-            load more
-          </Button>
-        )}
       </div>
+      {state.pagination.from < (state.pagination.total ?? 0) && (
+        <Button
+          className={style.books_button}
+          onClick={loadMore}
+          loading={state.loading}
+        >
+          load more
+        </Button>
+      )}
     </div>
   );
 };

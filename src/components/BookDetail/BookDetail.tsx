@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import style from "./bookpage.module.scss";
+import style from "./bookDetail.module.scss";
 import { Link, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { BooksState } from "../../store/slices/booksSlice";

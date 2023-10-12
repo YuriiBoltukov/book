@@ -17,7 +17,7 @@ import { CATEGORY_OPTIONS } from "../../shared/constants/filter.constants";
 import { useNavigate } from "react-router-dom";
 import { Button } from "antd";
 
-const Input: React.FC = () => {
+const SearchFilterSortBar: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const state = useSelector((state: { books: BooksState }) => state.books);
@@ -63,7 +63,6 @@ const Input: React.FC = () => {
   async function handleSubmit(event?: React.FormEvent<HTMLElement>) {
     if (event) event.preventDefault();
     try {
-      dispatch(setLoading(true));
       const queryData: BookQuery = {
         searchStr: state.searchStr,
         filters: {
@@ -71,11 +70,11 @@ const Input: React.FC = () => {
         },
         sort: state.sort,
       };
-
-      dispatch(resetPagination());
-      console.log(window.location.pathname);
       debugger;
-      if (window.location.pathname !== "") {
+      dispatch(resetPagination());
+      dispatch(setLoading(true));
+
+      if (window.location.pathname !== "/") {
         navigate("/");
       }
 
@@ -121,4 +120,4 @@ const Input: React.FC = () => {
   );
 };
 
-export default Input;
+export default SearchFilterSortBar;
