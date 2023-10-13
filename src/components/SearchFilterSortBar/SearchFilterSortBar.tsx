@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  BooksState,
   resetPagination,
   setBooks,
   setFilters,
@@ -16,15 +15,13 @@ import { CATEGORY } from "../../shared/constants/filter.constants";
 import { useNavigate } from "react-router-dom";
 import { Button, Input, Select, Space } from "antd";
 import style from "./searchFilterSortBar.module.scss";
+import { BooksReducer } from "../../store/store";
 
 const SearchFilterSortBar: React.FC = () => {
   const [disabled, setDisabled] = useState(true);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const state = useSelector((state: { books: BooksState }) => state.books);
-  const from = useSelector(
-    (state: { books: BooksState }) => state.books.pagination.from,
-  );
+  const state = useSelector((state: BooksReducer) => state.booksReducer);
   const [form, setForm] = useState({
     q: "",
     category: CATEGORY?.[0].value,
@@ -96,7 +93,7 @@ const SearchFilterSortBar: React.FC = () => {
 
       const { books, pagination } = await loadBooks(queryData, {
         ...state.pagination,
-        from,
+        from: 0,
       });
       dispatch(setLoading(false));
       dispatch(setBooks(books));
@@ -129,7 +126,7 @@ const SearchFilterSortBar: React.FC = () => {
             <label>Category</label>
             <Select
               // @ts-ignore
-              value={CATEGORY?.[0].value}
+              defaultValue={CATEGORY?.[0].value}
               style={{ width: 120 }}
               onChange={handleCategoryChange}
               options={CATEGORY}
@@ -139,7 +136,7 @@ const SearchFilterSortBar: React.FC = () => {
             <label>Sort method</label>
             <Select
               // @ts-ignore
-              value={SORT?.[0].value}
+              defaultValue={SORT?.[0].value}
               style={{ width: 120 }}
               onChange={handleSortOptionChange}
               options={SORT}

@@ -2,19 +2,22 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addBooks,
-  BooksState,
   setLoading,
   setPagination,
 } from "../../store/slices/booksSlice";
 import BookCard from "../BookCard/BookCard";
 import { BookQuery, loadBooks } from "../../shared/utils/book.functions";
 import { Book } from "../../shared/models/book.model";
-import style from "./booksList.module.scss";
+import style from "./bookList.module.scss";
 import { Button } from "antd";
+import { BooksReducer } from "../../store/store";
 
+/**
+ * Component to display a list of books with pagination and load more functionality.
+ */
 const BookList: React.FC = () => {
   const dispatch = useDispatch();
-  const state = useSelector((state: { books: BooksState }) => state.books);
+  const state = useSelector((state: BooksReducer) => state.booksReducer);
 
   /**
    * Loads more books and adds them to the list.
@@ -32,7 +35,6 @@ const BookList: React.FC = () => {
 
   /**
    * Retrieves a list of books based on the current query parameters.
-   * @returns A Promise that resolves to an array of Book objects.
    */
   async function getBooks(): Promise<Book[]> {
     const queryData: BookQuery = {
@@ -52,7 +54,7 @@ const BookList: React.FC = () => {
       return books;
     } catch (error) {
       console.error("Error loading books:", error);
-      throw error;
+      return [];
     }
   }
 

@@ -11,7 +11,6 @@ export interface BooksState extends CommonQuery {
 
 const initialState: BooksState = {
   books: [],
-
   loading: false,
   searchStr: "",
   filters: {
@@ -54,7 +53,11 @@ export const booksSlice = createSlice({
       state = initialState;
     },
     resetPagination(state) {
-      state.pagination = initialState.pagination;
+      state.pagination = {
+        from: 0,
+        limit: 30,
+        total: null,
+      };
     },
   },
 });

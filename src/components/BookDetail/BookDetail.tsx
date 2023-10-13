@@ -2,11 +2,12 @@ import React, { useEffect } from "react";
 import style from "./bookDetail.module.scss";
 import { Link, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { BooksState } from "../../store/slices/booksSlice";
+import { BooksReducer } from "../../store/store";
+
 const BookDetails = () => {
   const { id } = useParams();
-  const book = useSelector((state: { books: BooksState }) =>
-    state.books.books.find((book) => {
+  const book = useSelector((state: BooksReducer) =>
+    state.booksReducer.books.find((book) => {
       return book.id === id;
     }),
   );

@@ -1,10 +1,15 @@
-import {getBooks} from '../../api';
-import {Book, CommonQuery, Pagination} from '../models/book.model';
-
+import { getBooks } from "../../api";
+import { Book, CommonQuery, Pagination } from "../models/book.model";
 
 export interface BookQuery extends CommonQuery {}
 
-export async function loadBooks(params: BookQuery, pagination: Pagination): Promise<{ books: Book[], pagination: Partial<Pagination> }>{
+/**
+ * Loads a list of books based on the provided query parameters and pagination.
+ */
+export async function loadBooks(
+  params: BookQuery,
+  pagination: Pagination,
+): Promise<{ books: Book[]; pagination: Partial<Pagination> }> {
   try {
     const booksResponse = await getBooks(params, pagination);
 
@@ -18,9 +23,9 @@ export async function loadBooks(params: BookQuery, pagination: Pagination): Prom
       total: booksResponse.totalItems,
     };
 
-    return { books, pagination: newPagination };
+    return { books: books, pagination: newPagination };
   } catch (error) {
-    console.error('Error loading books:', error);
-    throw error;
+    console.error("Error loading books:", error);
+    return { books: [], pagination };
   }
 }
