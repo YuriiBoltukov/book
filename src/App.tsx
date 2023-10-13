@@ -8,14 +8,9 @@ function App() {
   const [load, setLoad] = useState(true);
   const { token } = theme.useToken();
   useEffect(() => {
-    const handleLoad = () => {
+    setTimeout(() => {
       setLoad(false);
-    };
-    window.addEventListener("load", handleLoad);
-    return () => {
-      window.removeEventListener("load", handleLoad);
-      setLoad(true);
-    };
+    }, 2000);
   }, []);
   return (
     <ConfigProvider
