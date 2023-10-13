@@ -16,6 +16,9 @@ const BookList: React.FC = () => {
   const dispatch = useDispatch();
   const state = useSelector((state: { books: BooksState }) => state.books);
 
+  /**
+   * Loads more books and adds them to the list.
+   */
   async function loadMore() {
     try {
       dispatch(setLoading(true));
@@ -27,6 +30,10 @@ const BookList: React.FC = () => {
     }
   }
 
+  /**
+   * Retrieves a list of books based on the current query parameters.
+   * @returns A Promise that resolves to an array of Book objects.
+   */
   async function getBooks(): Promise<Book[]> {
     const queryData: BookQuery = {
       searchStr: state.searchStr,
@@ -51,7 +58,10 @@ const BookList: React.FC = () => {
 
   return (
     <div>
-      <p>Found {state.pagination.total} results</p>
+      {state.pagination.total !== 0 ? (
+        <p>Found {state.pagination.total} results</p>
+      ) : null}
+
       <div className={style.books}>
         {state.books?.length
           ? state.books.map((book, i) => {

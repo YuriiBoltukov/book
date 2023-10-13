@@ -10,9 +10,6 @@ const BookDetails = () => {
       return book.id === id;
     }),
   );
-  useEffect(() => {
-    console.log(id);
-  }, []);
 
   return (
     <div className={style.details}>

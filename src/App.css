@@ -19,3 +19,7 @@
   left: 0;
   background: rgba(0, 0, 0, .2);
 }
+
+.form-wrapper {
+ margin: 20px;
+}

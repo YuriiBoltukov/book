@@ -1,0 +1,19 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  label {
+    color: #ffffff;
+    font-weight: bold;
+  }
+  Button {
+    margin-top: 40px;
+  }
+  &_item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-direction: column;
+    height: 55px;
+  }
+}

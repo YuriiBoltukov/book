@@ -1,1 +1,4 @@
-export const SORT_OPTIONS: string[] = ['relevance', 'newest'];
+export const SORT = [
+  { value: "relevance", label: "relevance" },
+  { value: "newest", label: "newest" },
+];

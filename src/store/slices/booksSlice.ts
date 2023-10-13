@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { Book, CommonQuery, Pagination } from "../../shared/models/book.model";
-import { SORT_OPTIONS } from "../../shared/constants/sort.constants";
-import { CATEGORY_OPTIONS } from "../../shared/constants/filter.constants";
+import { SORT } from "../../shared/constants/sort.constants";
+import { CATEGORY } from "../../shared/constants/filter.constants";
 
 export interface BooksState extends CommonQuery {
   books: Book[];
@@ -15,9 +15,9 @@ const initialState: BooksState = {
   loading: false,
   searchStr: "",
   filters: {
-    category: CATEGORY_OPTIONS[0],
+    category: CATEGORY[0].value,
   },
-  sort: SORT_OPTIONS[0],
+  sort: SORT[0].value,
   pagination: {
     from: 0,
     limit: 30,

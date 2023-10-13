@@ -9,30 +9,28 @@ type FCBook = { book: Book };
 
 const BookCard: React.FC<FCBook> = ({ book }: FCBook) => {
   return (
-    <>
-      <Card
-        hoverable
-        style={{ width: 180 }}
-        className={style.card}
-        cover={
-          <img
-            alt="example"
-            src={
-              book.volumeInfo?.imageLinks?.smallThumbnail ||
-              require("../../assets/images/book.jpg")
-            }
-          />
-        }
-      >
-        <Card.Meta
-          title={book.volumeInfo.title}
-          description={
-            book.volumeInfo.authors ? book.volumeInfo.authors.join(" ") : ""
+    <Card
+      hoverable
+      style={{ width: 180 }}
+      className={style.card}
+      cover={
+        <img
+          alt="example"
+          src={
+            book.volumeInfo?.imageLinks?.smallThumbnail ||
+            require("../../assets/images/book.jpg")
           }
         />
-        <Link to={"/detail/" + book.id}>Detail</Link>
-      </Card>
-    </>
+      }
+    >
+      <Card.Meta
+        title={book.volumeInfo.title}
+        description={
+          book.volumeInfo.authors ? book.volumeInfo.authors.join(" ") : ""
+        }
+      />
+      <Link to={"/detail/" + book.id}>Detail</Link>
+    </Card>
   );
 };
 

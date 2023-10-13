@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import DropdownSelect from "../DropdownSelect/DropdownSelect";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   BooksState,
@@ -12,12 +11,14 @@ import {
   setSort,
 } from "../../store/slices/booksSlice";
 import { BookQuery, loadBooks } from "../../shared/utils/book.functions";
-import { SORT_OPTIONS } from "../../shared/constants/sort.constants";
-import { CATEGORY_OPTIONS } from "../../shared/constants/filter.constants";
+import { SORT } from "../../shared/constants/sort.constants";
+import { CATEGORY } from "../../shared/constants/filter.constants";
 import { useNavigate } from "react-router-dom";
-import { Button } from "antd";
+import { Button, Input, Select, Space } from "antd";
+import style from "./searchFilterSortBar.module.scss";
 
 const SearchFilterSortBar: React.FC = () => {
+  const [disabled, setDisabled] = useState(true);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const state = useSelector((state: { books: BooksState }) => state.books);
@@ -26,40 +27,55 @@ const SearchFilterSortBar: React.FC = () => {
   );
   const [form, setForm] = useState({
     q: "",
-    category: "",
-    orderBy: "",
+    category: CATEGORY?.[0].value,
+    orderBy: SORT?.[0].value,
   });
 
-  /** handlse write down event in input */
+  /**
+   * Handler for changing the input value in the search field.
+   */
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
     setForm({ ...form, q: event.target.value });
     dispatch(setSearchStr(event.target.value));
   };
 
+  /**
+   * Handler for pressing the Enter key in the search input field.
+   */
   function handleKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
     if (event.key === "Enter") {
       handleSubmit();
     }
   }
 
-  /** handles select category event */
-  const handleCategoryChange = (
-    event: React.ChangeEvent<HTMLSelectElement>,
-  ) => {
-    setForm({ ...form, category: event.target.value });
-    dispatch(setFilters({ category: event.target.value }));
+  /**
+   * Handler for changing the selected category.
+   */
+  const handleCategoryChange = (value: string) => {
+    setForm({ ...form, category: value });
+    dispatch(setFilters({ category: value }));
   };
 
-  /** handles select sort event */
-  const handleSortOptionChange = (
-    event: React.ChangeEvent<HTMLSelectElement>,
-  ) => {
-    setForm({ ...form, orderBy: event.target.value });
-    dispatch(setSort(event.target.value));
+  /**
+   * Handler for changing the selected sorting option.
+   */
+  const handleSortOptionChange = (value: string) => {
+    setForm({ ...form, orderBy: value });
+    dispatch(setSort(value));
   };
 
-  /** sends request */
+  /**
+   * Handler to set disabled status for button
+   */
+  const handleDisabled = () => {
+    const a = form.q === "" && form.category === CATEGORY[0].value;
+    setDisabled(a);
+  };
+
+  /**
+   * Sends a request to load books based on selected parameters.
+   */
   async function handleSubmit(event?: React.FormEvent<HTMLElement>) {
     if (event) event.preventDefault();
     try {
@@ -70,7 +86,7 @@ const SearchFilterSortBar: React.FC = () => {
         },
         sort: state.sort,
       };
-      debugger;
+
       dispatch(resetPagination());
       dispatch(setLoading(true));
 
@@ -90,31 +106,54 @@ const SearchFilterSortBar: React.FC = () => {
     }
   }
 
+  useEffect(() => {
+    handleDisabled();
+  }, [form]);
+
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        value={form.q}
-        onChange={handleInputChange}
-        onKeyDown={handleKeyDown}
-        placeholder="Введите текст"
-      />
-      <div>
-        <DropdownSelect
-          value={form.category}
-          options={CATEGORY_OPTIONS}
-          onChange={handleCategoryChange}
-        />
-
-        <DropdownSelect
-          value={form.orderBy}
-          options={SORT_OPTIONS}
-          onChange={handleSortOptionChange}
-        />
+    <form onSubmit={handleSubmit} className={style.form}>
+      <div className="form-wrapper">
+        <Space wrap>
+          <div className={style.form_item}>
+            <label>Search</label>
+            <Input
+              type="text"
+              placeholder="Enter request"
+              value={form.q}
+              onChange={handleInputChange}
+              style={{ width: 240 }}
+              onKeyDown={handleKeyDown}
+            />
+          </div>
+          <div className={style.form_item}>
+            <label>Category</label>
+            <Select
+              // @ts-ignore
+              value={CATEGORY?.[0].value}
+              style={{ width: 120 }}
+              onChange={handleCategoryChange}
+              options={CATEGORY}
+            />
+          </div>
+          <div className={style.form_item}>
+            <label>Sort method</label>
+            <Select
+              // @ts-ignore
+              value={SORT?.[0].value}
+              style={{ width: 120 }}
+              onChange={handleSortOptionChange}
+              options={SORT}
+            />
+          </div>
+        </Space>
       </div>
-
-      <Button onClick={handleSubmit} loading={state.loading}>
-        Отправить
+      <Button
+        disabled={disabled}
+        onClick={handleSubmit}
+        loading={state.loading}
+        style={{ width: 120 }}
+      >
+        Send request
       </Button>
     </form>
   );
