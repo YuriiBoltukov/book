@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import style from "./bookDetail.module.scss";
 import { Link, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
